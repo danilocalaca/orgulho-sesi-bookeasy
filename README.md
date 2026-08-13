@@ -203,7 +203,7 @@ O desenvolvimento do BookEasy conta com uma equipe de **9 integrantes**, dividid
 
 | Integrante  | Função                               |
 | ----------- | ------------------------------------ |
-| **[Danilo](https://github.com/danilocalaca**  | Gerente de Projetos / Designer UX/UI |
+| **<a href="https://github.com/danilocalaca" target="_blank">@danilocalaca</a>**  | Gerente de Projetos / Designer UX/UI |
 | **Breno**   | Design do site                       |                   
 | **Nicolas** | Design do site                       |                   
 | **Gustavo** | Banco de dados / Responsividade      |                   
