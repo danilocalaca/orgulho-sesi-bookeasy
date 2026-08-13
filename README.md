@@ -201,17 +201,17 @@ A estrutura do banco de dados será desenvolvida buscando manter os dados organi
 
 O desenvolvimento do BookEasy conta com uma equipe de **9 integrantes**, dividida em diferentes áreas:
 
-| Integrante  | Função                               |
-| ----------- | ------------------------------------ |
-| **<a href="https://github.com/danilocalaca" target="_blank">@danilocalaca</a>**  | Gerente de Projetos / Designer UX/UI |
-| **Breno**   | Design do site                       |                   
-| **Nicolas** | Design do site                       |                   
-| **Gustavo** | Banco de dados / Responsividade      |                   
-| **Pedro**   | Banco de dados / Responsividade      |                  
-| **Marcos**  | Integração do projeto                |                  
-| **Jalson**  | Integração do projeto                |                  
-| **Tarciso** | Apresentação / Slides                |                  
-| **Victor**  | Apresentação / Slides                |                   
+| Integrante  | Função                               | Usuário          |
+| ----------- | ------------------------------------ | <a href="https://github.com/danilocalaca" target="_blank">@danilocalaca</a>                 |
+| **Danilo**  | Gerente de Projetos / Designer UX/UI |                  |
+| **Breno**   | Design do site                       |                  |
+| **Nicolas** | Design do site                       |                  |
+| **Gustavo** | Banco de dados / Responsividade      |                  |
+| **Pedro**   | Banco de dados / Responsividade      |                  |
+| **Marcos**  | Integração do projeto                |                  |
+| **Jalson**  | Integração do projeto                |                  |
+| **Tarciso** | Apresentação / Slides                |                  |
+| **Victor**  | Apresentação / Slides                |                  |
 
 A divisão das funções permite que diferentes áreas do projeto sejam desenvolvidas simultaneamente, desde o design e banco de dados até a integração e apresentação.
 
