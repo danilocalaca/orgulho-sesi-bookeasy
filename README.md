@@ -202,8 +202,8 @@ A estrutura do banco de dados será desenvolvida buscando manter os dados organi
 O desenvolvimento do BookEasy conta com uma equipe de **9 integrantes**, dividida em diferentes áreas:
 
 | Integrante  | Função                               | Usuário          |
-| ----------- | ------------------------------------ | <a href="https://github.com/danilocalaca" target="_blank">@danilocalaca</a>                 |
-| **Danilo**  | Gerente de Projetos / Designer UX/UI |                  |
+| ----------- | ------------------------------------ | ---------------- |
+| **Danilo**  | Gerente de Projetos / Designer UX/UI | <a href="https://github.com/danilocalaca" target="_blank">@danilocalaca</a>                 |
 | **Breno**   | Design do site                       |                  |
 | **Nicolas** | Design do site                       |                  |
 | **Gustavo** | Banco de dados / Responsividade      |                  |
