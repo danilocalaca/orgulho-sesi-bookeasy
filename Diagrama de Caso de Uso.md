@@ -6,8 +6,6 @@ O diagrama de casos de uso representa as principais funcionalidades do sistema *
 
 O BookEasy é um sistema de gerenciamento de biblioteca escolar desenvolvido para facilitar o acesso dos alunos aos livros e auxiliar no gerenciamento da biblioteca.
 
----
-
 ## Atores
 
 O sistema possui três atores principais:
