@@ -204,13 +204,13 @@ O desenvolvimento do BookEasy conta com uma equipe de **9 integrantes**, dividid
 | Integrante  | Função                               | Usuário          |
 | ----------- | ------------------------------------ | ---------------- |
 | **Danilo**  | Gerente de Projetos / Designer UX/UI | <a href="https://github.com/danilocalaca">@danilocalaca</a>                 |
-| **Breno**   | Design do site                       |                  |
-| **Nicolas** | Design do site                       |                  |
-| **Gustavo** | Banco de dados / Responsividade      |                  |
-| **Pedro**   | Banco de dados / Responsividade      |                  |
-| **Marcos**  | Integração do projeto                |                  |
-| **Jalson**  | Integração do projeto                |                  |
-| **Tarciso** | Apresentação / Slides                |                  |
+| **Breno**   | Design do site                       | <a href="https://github.com/danilocalaca">@brenorck</a>                 |
+| **Nicolas** | Design do site                       | <a href="https://github.com/danilocalaca">@</a>                 |
+| **Gustavo** | Banco de dados / Responsividade      | <a href="https://github.com/danilocalaca">@</a>                 |
+| **Pedro**   | Banco de dados / Responsividade      | <a href="https://github.com/danilocalaca">@</a>                 |
+| **Marcos**  | Integração do projeto                | <a href="https://github.com/danilocalaca">@</a>                 |
+| **Jalson**  | Integração do projeto                | <a href="https://github.com/danilocalaca">@jalsinho</a>                 |
+| **Tarciso** | Apresentação / Slides                | <a href="https://github.com/danilocalaca">@</a>                 |
 | **Victor**  | Apresentação / Slides                | <a href="https://github.com/victortheeng">@victortheeng</a>                 |
 
 A divisão das funções permite que diferentes áreas do projeto sejam desenvolvidas simultaneamente, desde o design e banco de dados até a integração e apresentação.
