@@ -39,7 +39,7 @@ Os casos de uso administrativos são compartilhados entre o **Bibliotecário** e
 
 ## Diagrama
 
-![Diagrama de Casos de Uso](Diagrama-Caso-de-Uso(BookEasy).png)
+![Diagrama de Casos de Uso](diagrama-caso-de-uso-bookeasy.png)
 ## Diagrama Editável
 
 O diagrama foi desenvolvido utilizando o Lucid.app. A versão editável pode ser acessada pelo link abaixo:
