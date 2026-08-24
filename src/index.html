@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BookEasy: descubra e reserve sua próxima leitura.">
+  <title>BookEasy | Sua próxima história</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="BookEasy início"><span class="brand-mark" aria-hidden="true">▮▮</span> BookEasy</a>
+      <nav class="main-nav" aria-label="Navegação principal">
+        <a class="active" href="#top">Início</a>
+        <a href="#destaques">Explorar</a>
+        <a href="#reservas">Minhas reservas</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-button" aria-label="Pesquisar" data-focus-search><span class="search-icon" aria-hidden="true"></span></button>
+        <span class="action-divider" aria-hidden="true"></span>
+        <div class="profile-area">
+          <button class="profile-button" aria-label="Abrir perfil" aria-expanded="false" aria-controls="profile-panel"><span class="profile-icon" aria-hidden="true"></span></button>
+          <section class="profile-panel" id="profile-panel" aria-hidden="true">
+            <div class="profile-heading"><span class="profile-avatar">AS</span><div><strong>André Silva</strong><span>Aluno</span></div></div>
+            <div class="profile-info"><span>Turma</span><strong>9º ano B</strong></div>
+            <div class="profile-info"><span>Livros lidos este ano</span><strong>12 livros</strong></div>
+            <a href="#reservas">Ver minhas reservas <span aria-hidden="true">→</span></a>
+          </section>
+        </div>
+        <button class="menu-button" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container">
+        <span class="eyebrow">Nova plataforma para a biblioteca do SESI Paulista</span>
+        <h1>Encontre sua próxima história.</h1>
+        <p class="hero-copy">Explore o acervo completo da biblioteca, descubra novos títulos recomendados e reserve o seu livro de forma instantânea.</p>
+        <div class="hero-actions"><a class="button primary" href="#destaques">Começar a Explorar</a><a class="button secondary" href="#passos">Como funciona</a></div>
+        <form class="search-bar" id="search-form">
+          <span class="search-icon" aria-hidden="true"></span>
+          <input id="search-input" type="search" placeholder="Buscar livros, autores ou categorias..." aria-label="Buscar livros, autores ou categorias">
+          <button type="submit">Pesquisar</button>
+        </form>
+        <p class="search-message" id="search-message" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="category-band">
+      <div class="container">
+        <div class="section-heading category-heading"><div><h2>Explore por categoria</h2><p>Encontre uma leitura que combine com você.</p></div><a href="#destaques">Ver todas as categorias <span aria-hidden="true">→</span></a></div>
+        <div class="category-list" role="list">
+          <button class="category active" role="listitem">Ficção Científica</button><button class="category" role="listitem">Romance</button><button class="category" role="listitem">Aventura</button><button class="category" role="listitem">Fantasia</button><button class="category" role="listitem">Mistério</button><button class="category" role="listitem">Terror</button><button class="category" role="listitem">Biografias</button><button class="category" role="listitem">Drama</button><button class="category" role="listitem">Literatura brasileira</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="book-section" id="destaques">
+      <div class="container"><div class="section-heading"><div><h2>Livros em destaque</h2><p>Os títulos mais lidos e recomendados pelos professores esta semana.</p></div></div><div class="book-grid" id="featured-books"></div></div>
+    </section>
+
+    <section class="book-section recommendations" id="reservas">
+      <div class="container"><div class="section-heading"><div><h2>Talvez você goste</h2><p>Recomendações baseadas nas suas últimas leituras.</p></div></div><div class="book-grid" id="recommended-books"></div></div>
+    </section>
+
+    <section class="stats-section"><div class="container stats-grid"><div class="stats-intro"><span class="label">NOSSOS NÚMEROS</span><h2>Uma biblioteca viva<br>e conectada.</h2></div><div class="stat"><strong>1.000+</strong><span>Livros catalogados no acervo</span></div><div class="stat"><strong>1.000+</strong><span>Alunos ativos lendo mensalmente</span></div><div class="stat"><strong>98%</strong><span>Taxa de devoluções no prazo ideal</span></div></div></section>
+
+    <section class="steps-section" id="passos"><div class="container"><div class="center-heading"><h2>Leitura em três passos simples</h2><p>Desenvolvemos o BookEasy para integrar a leitura ao seu dia a dia escolar sem burocracias.</p></div><div class="steps-grid"><article class="step"><span class="label">PASSO 1</span><h3>Escolha sua obra</h3><p>Explore nossa curadoria ou pesquise o título específico que você precisa para o seu projeto escolar ou momento de lazer.</p></article><article class="step"><span class="label">PASSO 2</span><h3>Reserve instantaneamente</h3><p>Com um clique, garanta o exemplar. Caso esteja emprestado, entre na fila digital de forma simples e transparente.</p></article><article class="step"><span class="label">PASSO 3</span><h3>Retire na biblioteca</h3><p>Passe no balcão da biblioteca da escola, mostre sua reserva no celular e comece a ler no mesmo instante.</p></article></div></div></section>
+
+    <section class="cta-section"><div class="container"><div class="cta"><h2>Pronto para sua próxima<br>leitura?</h2><p>Acesse o BookEasy agora mesmo com as credenciais do portal do aluno e<br class="desktop-only"> descubra um mundo de conhecimento.</p><a class="button primary" id="login-cta" href="#destaques">Entrar na minha Conta</a></div></div></section>
+  </main>
+
+  <footer class="site-footer"><div class="container"><div class="footer-main"><div><a class="brand" href="#top"><span class="brand-mark dark" aria-hidden="true">▮▮</span> BookEasy</a><p>A plataforma definitiva para conectar estudantes,<br> educadores e a maravilhosa biblioteca escolar.</p></div><div class="footer-links"><div><strong>Plataforma</strong><a href="#destaques">Explorar Acervo</a><a href="#reservas">Minhas Reservas</a><a href="#passos">Suporte ao Aluno</a></div><div><strong>Institucional</strong><a href="#top">Sobre Nós</a><a href="#top">Contato</a></div></div></div><div class="footer-bottom"><span>© 2026 BookEasy. Desenvolvido por Danilo Calaça.</span><div><a href="#top">Termos de Serviço</a><a href="#top">Privacidade</a></div></div></div></footer>
+  <script src="script.js"></script>
+</body>
+</html>
