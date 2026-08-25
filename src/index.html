@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="BookEasy: descubra e reserve sua próxima leitura.">
   <title>BookEasy | Sua próxima história</title>
-  <link rel="icon" type="image/png" href="imgs/BookEasy%20-%20Arquitetura%20do%20projeto.png">
+  <link rel="icon" type="image/svg+xml" href="imgs/bookeasy-favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -21,15 +21,17 @@
         <a href="#reservas">Minhas reservas</a>
       </nav>
       <div class="header-actions">
-        <button class="icon-button" aria-label="Pesquisar" data-focus-search><span class="search-icon" aria-hidden="true"></span></button>
+        <div class="header-search" id="header-search"><button class="icon-button" aria-label="Abrir pesquisa" aria-expanded="false" aria-controls="header-search-form" data-focus-search><span class="search-icon" aria-hidden="true"></span></button><form class="header-search-form" id="header-search-form"><input id="header-search-input" type="search" placeholder="Buscar livros..." aria-label="Buscar livros"><button type="submit" aria-label="Pesquisar">→</button></form></div>
         <span class="action-divider" aria-hidden="true"></span>
         <div class="profile-area">
           <button class="profile-button" aria-label="Abrir perfil" aria-expanded="false" aria-controls="profile-panel"><span class="profile-icon" aria-hidden="true"></span></button>
           <section class="profile-panel" id="profile-panel" aria-hidden="true">
-            <div class="profile-heading"><span class="profile-avatar">AS</span><div><strong>André Silva</strong><span>Aluno</span></div></div>
-            <div class="profile-info"><span>Turma</span><strong>9º ano B</strong></div>
-            <div class="profile-info"><span>Livros lidos este ano</span><strong>12 livros</strong></div>
-            <a href="#reservas">Ver minhas reservas <span aria-hidden="true">→</span></a>
+            <div class="profile-heading" data-student-account hidden><span class="profile-avatar">AS</span><div><strong>André Silva</strong><span>Aluno</span></div></div>
+            <div class="profile-info" data-student-account hidden><span>Turma</span><strong>9º ano B</strong></div>
+            <div class="profile-info" data-student-account hidden><span>Livros lidos este ano</span><strong>12 livros</strong></div>
+            <a href="#reservas" data-student-account hidden>Ver minhas reservas <span aria-hidden="true">→</span></a>
+            <button class="profile-login" id="student-profile-login" type="button">Entrar como aluno</button>
+            <button class="profile-logout" id="student-logout" type="button" data-student-account hidden>Sair da conta</button>
           </section>
         </div>
         <button class="menu-button" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -40,6 +42,7 @@
   <main id="top">
     <section class="hero">
       <div class="container">
+        <a class="login-notice" id="student-login-notice" href="#login-aluno"><strong>Reserve seus livros com facilidade:</strong> Faça login para continuar.</a>
         <span class="eyebrow">Nova plataforma para a biblioteca do SESI Paulista</span>
         <h1>Encontre sua próxima história.</h1>
         <p class="hero-copy">Explore o acervo completo da biblioteca, descubra novos títulos recomendados e reserve o seu livro de forma instantânea.</p>
@@ -53,17 +56,8 @@
       </div>
     </section>
 
-    <section class="category-band">
-      <div class="container">
-        <div class="section-heading category-heading"><div><h2>Explore por categoria</h2><p>Encontre uma leitura que combine com você.</p></div><a href="#explorar">Ver todas as categorias <span aria-hidden="true">→</span></a></div>
-        <div class="category-list" role="list">
-          <button class="category active" role="listitem" data-category="Todos">Todos</button><button class="category" role="listitem" data-category="Ficção Científica">Ficção Científica</button><button class="category" role="listitem" data-category="Romance">Romance</button><button class="category" role="listitem" data-category="Aventura">Aventura</button><button class="category" role="listitem" data-category="Fantasia">Fantasia</button><button class="category" role="listitem" data-category="Mistério">Mistério</button><button class="category" role="listitem" data-category="Terror">Terror</button><button class="category" role="listitem" data-category="Biografias">Biografias</button><button class="category" role="listitem" data-category="Drama">Drama</button><button class="category" role="listitem" data-category="Literatura brasileira">Literatura brasileira</button>
-        </div>
-      </div>
-    </section>
-
     <section class="book-section" id="destaques">
-      <div class="container"><div class="section-heading"><div><h2>Livros em destaque</h2><p>Os títulos mais lidos e recomendados pelos professores esta semana.</p></div></div><div class="book-grid" id="featured-books"></div></div>
+      <div class="container"><div class="section-heading category-heading"><div><h2>Livros em destaque</h2><p id="featured-subtitle">Escolha uma categoria para encontrar uma leitura que combine com você.</p></div><a href="#explorar">Ver todos os livros <span aria-hidden="true">→</span></a></div><div class="category-list featured-categories" role="list" aria-label="Filtrar livros em destaque"><button class="category active" role="listitem" data-category="Todos">Todos</button><button class="category" role="listitem" data-category="Ficção Científica">Ficção Científica</button><button class="category" role="listitem" data-category="Romance">Romance</button><button class="category" role="listitem" data-category="Aventura">Aventura</button><button class="category" role="listitem" data-category="Fantasia">Fantasia</button><button class="category" role="listitem" data-category="Mistério">Mistério</button><button class="category" role="listitem" data-category="Terror">Terror</button><button class="category" role="listitem" data-category="Biografias">Biografias</button><button class="category" role="listitem" data-category="Drama">Drama</button><button class="category" role="listitem" data-category="Literatura brasileira">Literatura brasileira</button></div><div class="book-grid" id="featured-books"></div></div>
     </section>
 
     <section class="book-section recommendations" id="recomendacoes">
@@ -71,7 +65,7 @@
     </section>
 
     <section class="app-view book-section" id="explorar" hidden>
-      <div class="container"><div class="section-heading"><div><h2>Explorar acervo</h2><p>Pesquise por título, autor ou categoria.</p></div></div><div class="view-toolbar"><button class="button secondary" data-back-home>Voltar para início</button><span id="catalog-count"></span></div><div class="book-grid" id="catalog-books"></div></div>
+      <div class="container"><div class="section-heading"><div><h2>Explorar acervo</h2><p>Pesquise por título, autor ou categoria.</p></div></div><div class="view-toolbar"><button class="button secondary" data-back-home>Voltar para início</button><label class="sort-control">Ordenar por<select id="catalog-sort" aria-label="Ordenar livros"><option value="default">Padrão do acervo</option><option value="title-asc">Título: A-Z</option><option value="title-desc">Título: Z-A</option><option value="year-desc">Lançamento: mais recente</option><option value="year-asc">Lançamento: mais antigo</option><option value="author-asc">Autor: A-Z</option></select></label><span id="catalog-count"></span></div><div class="category-list catalog-categories" role="list" aria-label="Filtrar por categoria"><button class="category active" role="listitem" data-category="Todos">Todos</button><button class="category" role="listitem" data-category="Ficção Científica">Ficção Científica</button><button class="category" role="listitem" data-category="Romance">Romance</button><button class="category" role="listitem" data-category="Aventura">Aventura</button><button class="category" role="listitem" data-category="Fantasia">Fantasia</button><button class="category" role="listitem" data-category="Mistério">Mistério</button><button class="category" role="listitem" data-category="Terror">Terror</button><button class="category" role="listitem" data-category="Biografias">Biografias</button><button class="category" role="listitem" data-category="Drama">Drama</button><button class="category" role="listitem" data-category="Literatura brasileira">Literatura brasileira</button></div><div class="book-grid" id="catalog-books"></div></div>
     </section>
 
     <section class="app-view book-section reservations-view" id="reservas" hidden>
@@ -87,15 +81,16 @@
       </div>
     </section>
 
-    <section class="stats-section"><div class="container stats-grid"><div class="stats-intro"><span class="label">NOSSOS NÚMEROS</span><h2>Uma biblioteca viva<br>e conectada.</h2></div><div class="stat"><strong>1.000+</strong><span>Livros catalogados no acervo</span></div><div class="stat"><strong>1.000+</strong><span>Alunos ativos lendo mensalmente</span></div><div class="stat"><strong>98%</strong><span>Taxa de devoluções no prazo ideal</span></div></div></section>
+    <section class="stats-section"><div class="container stats-grid"><div class="stats-intro"><span class="label">NOSSOS NÚMEROS</span><h2>Uma biblioteca viva<br>e conectada.</h2></div><div class="stat"><strong>100+</strong><span>Livros catalogados no acervo</span></div><div class="stat"><strong>500+</strong><span>Alunos ativos lendo mensalmente</span></div><div class="stat"><strong>98%</strong><span>Taxa de devoluções no prazo ideal</span></div></div></section>
 
     <section class="steps-section" id="passos"><div class="container"><div class="center-heading"><h2>Leitura em três passos simples</h2><p>Desenvolvemos o BookEasy para integrar a leitura ao seu dia a dia escolar sem burocracias.</p></div><div class="steps-grid"><article class="step"><span class="label">PASSO 1</span><h3>Escolha sua obra</h3><p>Explore nossa curadoria ou pesquise o título específico que você precisa para o seu projeto escolar ou momento de lazer.</p></article><article class="step"><span class="label">PASSO 2</span><h3>Reserve instantaneamente</h3><p>Com um clique, garanta o exemplar. Caso esteja emprestado, entre na fila digital de forma simples e transparente.</p></article><article class="step"><span class="label">PASSO 3</span><h3>Retire na biblioteca</h3><p>Passe no balcão da biblioteca da escola, mostre sua reserva no celular e comece a ler no mesmo instante.</p></article></div></div></section>
 
-    <section class="cta-section"><div class="container"><div class="cta"><h2>Pronto para sua próxima<br>leitura?</h2><p>Acesse o BookEasy agora mesmo com as credenciais do portal do aluno e<br class="desktop-only"> descubra um mundo de conhecimento.</p><a class="button primary" id="login-cta" href="#explorar">Entrar na minha Conta</a></div></div></section>
+    <section class="cta-section" id="student-login-cta"><div class="container"><div class="cta"><h2>Pronto para sua próxima<br>leitura?</h2><p>Acesse o BookEasy agora mesmo com as credenciais do portal do aluno e<br class="desktop-only"> descubra um mundo de conhecimento.</p><a class="button primary" id="login-cta" href="#login-aluno">Entrar na minha Conta</a></div></div></section>
   </main>
 
   <div class="book-modal" id="book-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden><div class="modal-backdrop" data-close-modal></div><div class="modal-content"><button class="modal-close" aria-label="Fechar detalhes" data-close-modal>×</button><img id="modal-cover" class="modal-cover" alt=""><div class="modal-info"><span id="modal-genre" class="genre"></span><h2 id="modal-title"></h2><p id="modal-author"></p><p id="modal-year"></p><p id="modal-description"></p><div id="modal-status" class="modal-status"></div><button id="modal-action" class="button primary"></button></div></div></div>
   <div class="login-modal" id="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-title" hidden><div class="modal-backdrop" data-close-login></div><div class="login-content"><button class="modal-close" aria-label="Fechar login" data-close-login>×</button><span class="label">ACESSO INSTITUCIONAL</span><h2 id="login-title">Entrar como bibliotecário</h2><p>Use o acesso da equipe para administrar a biblioteca.</p><form id="librarian-login-form" class="admin-form"><label>Usuário<input name="username" autocomplete="username" required></label><label>Senha<input name="password" type="password" autocomplete="current-password" required></label><button class="button primary" type="submit">Entrar no painel</button><p class="form-message error-message" id="login-message" aria-live="polite"></p></form><small>Acesso de demonstração: bibliotecario / bookeasy123</small></div></div>
+  <div class="login-modal" id="student-login-modal" role="dialog" aria-modal="true" aria-labelledby="student-login-title" hidden><div class="modal-backdrop" data-close-student-login></div><div class="login-content"><button class="modal-close" aria-label="Fechar login do aluno" data-close-student-login>×</button><span class="label">ACESSO DO ALUNO</span><h2 id="student-login-title">Entrar na minha conta</h2><p>Acesse suas reservas e acompanhe suas leituras.</p><form id="student-login-form" class="admin-form"><label>Usuário<input name="username" autocomplete="username" required></label><label>Senha<input name="password" type="password" autocomplete="current-password" required></label><button class="button primary" type="submit">Entrar como aluno</button><p class="form-message error-message" id="student-login-message" aria-live="polite"></p></form><small>Acesso de demonstração: aluno / bookeasy123</small></div></div>
   <div class="student-modal" id="student-modal" role="dialog" aria-modal="true" aria-labelledby="student-modal-title" hidden><div class="modal-backdrop" data-close-student></div><div class="student-content"><button class="modal-close" aria-label="Fechar informações do aluno" data-close-student>×</button><span class="label">CADASTRO DO ALUNO</span><h2 id="student-modal-title"></h2><div class="student-details"><div><span>Reservas</span><strong id="student-modal-reservations"></strong></div><div><span>Status</span><strong>Ativo</strong></div></div><form id="edit-student-form" class="admin-form"><label>Nome<input name="name" required></label><label>Turma<input name="className" required></label><label>E-mail<input name="email" type="email" required></label><div class="student-modal-actions"><button class="button primary" type="submit">Salvar alterações</button><button class="button secondary" type="button" id="student-modal-delete">Excluir cadastro</button></div><p class="form-message" id="student-edit-message" aria-live="polite"></p></form></div></div>
   <div class="book-admin-modal" id="book-admin-modal" role="dialog" aria-modal="true" aria-labelledby="book-admin-title" hidden><div class="modal-backdrop" data-close-book-admin></div><div class="book-admin-content"><button class="modal-close" aria-label="Fechar gerenciamento do livro" data-close-book-admin>×</button><span class="label">GERENCIAR LIVRO</span><h2 id="book-admin-title"></h2><form id="edit-book-form" class="admin-form"><label>Capa por link<input name="cover" type="url"></label><label class="file-field">Ou escolha uma imagem<input name="coverFile" type="file" accept="image/*"></label><label>Título<input name="title" required></label><label>Autor<input name="author" required></label><label>Ano de lançamento<input name="year" type="number" min="1" max="2100" required></label><div class="student-modal-actions"><button class="button primary" type="submit">Salvar alterações</button><button class="button secondary" type="button" id="book-admin-delete">Excluir livro</button></div><p class="form-message" id="book-edit-message" aria-live="polite"></p></form></div></div>
   <footer class="site-footer"><div class="container"><div class="footer-main"><div><a class="brand" href="#top"><span class="brand-mark dark" aria-hidden="true">▮▮</span> BookEasy</a><p>A plataforma definitiva para conectar estudantes,<br> educadores e a maravilhosa biblioteca escolar.</p></div><div class="footer-links"><div><strong>Plataforma</strong><a href="#explorar">Explorar Acervo</a><a href="#reservas">Minhas Reservas</a><a href="#passos">Suporte ao Aluno</a></div><div><strong>Institucional</strong><a href="#biblioteca" id="institutional-link">Área do bibliotecário</a><a href="#top">Contato</a></div></div></div><div class="footer-bottom"><span>© 2026 BookEasy. Desenvolvido por Danilo Calaça.</span><div><a href="#top">Termos de Serviço</a><a href="#top">Privacidade</a></div></div></div></footer>
