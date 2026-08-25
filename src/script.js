@@ -102,6 +102,29 @@ function saveReservations() {
   renderAdmin();
 }
 
+function renderAdminList(selector, items, emptyMessage) {
+  const list = document.querySelector(selector);
+  const visibleItems = items.slice(0, 10);
+  const hiddenItems = items.slice(10);
+  list.innerHTML = visibleItems.concat(hiddenItems).join("") || `<p class="empty-state">${emptyMessage}</p>`;
+  if (hiddenItems.length) {
+    const hiddenRows = [...list.children].slice(10);
+    hiddenRows.forEach((row) => row.hidden = true);
+    const toggle = document.createElement("button");
+    toggle.className = "list-toggle";
+    toggle.type = "button";
+    toggle.textContent = `Mostrar todos (${items.length})`;
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.addEventListener("click", () => {
+      const expanded = toggle.getAttribute("aria-expanded") === "true";
+      hiddenRows.forEach((row) => row.hidden = expanded);
+      toggle.textContent = expanded ? `Mostrar todos (${items.length})` : "Mostrar menos";
+      toggle.setAttribute("aria-expanded", String(!expanded));
+    });
+    list.append(toggle);
+  }
+}
+
 function renderAdmin() {
   if (!document.querySelector("#admin-books")) return;
   const setText = (selector, value) => { const element = document.querySelector(selector); if (element) element.textContent = value; };
@@ -109,11 +132,11 @@ function renderAdmin() {
   setText("#admin-student-count", students.length);
   setText("#admin-reservation-count", reservations.length);
   setText("#admin-reservation-label", `${reservationRequests.length} pendentes`);
-  document.querySelector("#admin-books").innerHTML = books.map((book) => `<div class="admin-row book-row" data-book-id="${book.id}" role="button" tabindex="0"><div class="book-summary"><strong>${book.title}</strong><span>${book.author} · ${book.year || "Ano não informado"} · ${book.genre}</span></div></div>`).join("") || `<p class="empty-state">Nenhum livro cadastrado.</p>`;
+  renderAdminList("#admin-books", books.map((book) => `<div class="admin-row book-row" data-book-id="${book.id}" role="button" tabindex="0"><div class="book-summary"><strong>${book.title}</strong><span>${book.author} · ${book.year || "Ano não informado"} · ${book.genre}</span></div></div>`), "Nenhum livro cadastrado.");
   const pendingRows = reservationRequests.map((id) => { const book = books.find((item) => item.id === id); return book ? `<div class="admin-row request-row"><div><strong>${book.title}</strong><span>André Silva · 9º ano B · Pendente</span></div><div class="row-actions"><button class="text-action approve-action" data-approve-request="${book.id}">Aprovar</button><button class="text-action" data-deny-request="${book.id}">Recusar</button></div></div>` : ""; }).join("");
   const approvedRows = reservations.map((id) => { const book = books.find((item) => item.id === id); return book ? `<div class="admin-row"><div><strong>${book.title}</strong><span>André Silva · 9º ano B · Aprovada</span></div><button class="text-action" data-admin-cancel="${book.id}">Cancelar</button></div>` : ""; }).join("");
   document.querySelector("#admin-reservations").innerHTML = pendingRows + approvedRows || `<p class="admin-note">Nenhuma solicitação ou reserva ativa.</p>`;
-  document.querySelector("#admin-students").innerHTML = students.map((student) => `<div class="admin-row student-row" data-student-id="${student.id}" role="button" tabindex="0"><div class="student-summary"><strong>${student.name}</strong><span>${student.className} · ${student.email}</span></div><div class="row-actions"><span class="student-state">Ativo</span></div></div>`).join("");
+  renderAdminList("#admin-students", students.map((student) => `<div class="admin-row student-row" data-student-id="${student.id}" role="button" tabindex="0"><div class="student-summary"><strong>${student.name}</strong><span>${student.className} · ${student.email}</span></div><div class="row-actions"><span class="student-state">Ativo</span></div></div>`), "Nenhum aluno cadastrado.");
   document.querySelectorAll(".book-row").forEach((row) => {
     const openDetails = () => openBookAdminModal(Number(row.dataset.bookId));
     row.addEventListener("click", openDetails);
@@ -255,6 +278,7 @@ function showView(view) {
     document.body.classList.add("modal-open");
     view = "top";
   }
+  document.body.classList.toggle("librarian-mode", view === "biblioteca");
   const isHome = !["explorar", "reservas", "biblioteca"].includes(view);
   document.querySelectorAll(".app-view").forEach((section) => { section.hidden = section.id !== view; });
   document.querySelectorAll("main > section:not(.app-view)").forEach((section) => { section.hidden = !isHome; });
@@ -357,7 +381,6 @@ document.querySelector("#student-login-form").addEventListener("submit", (event)
   if (!valid) { message.textContent = "Usuário ou senha incorretos."; return; }
   localStorage.setItem(studentSessionKey, "true");
   updateStudentProfile();
-  document.querySelector("#student-login-cta").hidden = true;
   document.querySelector("#student-login-notice").hidden = true;
   event.currentTarget.reset();
   message.textContent = "";
@@ -368,11 +391,6 @@ document.querySelector("#student-login-form").addEventListener("submit", (event)
 document.querySelector("#librarian-logout").addEventListener("click", () => {
   localStorage.removeItem(librarianSessionKey);
   window.location.hash = "top";
-});
-document.querySelector("#login-cta").addEventListener("click", (event) => {
-  event.preventDefault();
-  document.querySelector("#student-login-modal").hidden = false;
-  document.body.classList.add("modal-open");
 });
 document.querySelector("#student-login-notice").addEventListener("click", (event) => {
   event.preventDefault();
@@ -448,7 +466,6 @@ const updateStudentProfile = () => {
   const authenticated = localStorage.getItem(studentSessionKey) === "true";
   document.querySelectorAll("[data-student-account]").forEach((element) => { element.hidden = !authenticated; });
   document.querySelector("#student-profile-login").hidden = authenticated;
-  document.querySelector("#student-login-cta").hidden = authenticated;
   document.querySelector("#student-login-notice").hidden = authenticated;
   profilePanel.classList.toggle("logged-out", !authenticated);
 };
