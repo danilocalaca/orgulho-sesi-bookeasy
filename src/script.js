@@ -505,3 +505,6 @@ render();
 renderAdmin();
 showView(window.location.hash.slice(1));
 updateStudentProfile();
+
+const SUPABASE_URL = https://erscwadkdcvepprzunue.supabase.co/rest/v1/
+const SUPABASE_KEY = https://erscwadkdcvepprzunue.supabase.co/rest/v1/
