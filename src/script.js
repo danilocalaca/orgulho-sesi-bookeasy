@@ -507,4 +507,4 @@ showView(window.location.hash.slice(1));
 updateStudentProfile();
 
 const SUPABASE_URL = https://erscwadkdcvepprzunue.supabase.co/rest/v1/
-const SUPABASE_KEY = https://erscwadkdcvepprzunue.supabase.co/rest/v1/
+const SUPABASE_KEY = sb_publishable_mlyMU3mwhB_PHjh92XoEIQ_b8OdY3C9
