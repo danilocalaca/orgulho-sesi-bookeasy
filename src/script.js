@@ -1,3 +1,10 @@
+const SUPABASE_URL = "https://pdgdcjiwbnimmievwkrr.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_IdfMuH2OdtSzGzrQ1DR0UQ_dUM3dMdr";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
 const seedBooks = [
   { id: 1, cover: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=700&q=85", genre: "Fantasia", title: "O Pequeno Príncipe", author: "Antoine de Saint-Exupéry", year: 1943, description: "Uma história delicada sobre amizade, afeto e o olhar curioso para o mundo." },
   { id: 2, cover: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=700&q=85", genre: "Ficção Científica", title: "1984", author: "George Orwell", year: 1949, description: "Um clássico sobre liberdade, vigilância e o poder de controlar a informação." },
@@ -505,3 +512,19 @@ render();
 renderAdmin();
 showView(window.location.hash.slice(1));
 updateStudentProfile();
+
+async function testarSupabase() {
+  const { data, error } = await supabaseClient
+    .from('livros')
+    .select('*')
+    .limit(1);
+
+  if (error) {
+    console.error('Erro ao conectar com Supabase:', error);
+    return;
+  }
+
+  console.log('Supabase conectado!', data);
+}
+
+testarSupabase();
