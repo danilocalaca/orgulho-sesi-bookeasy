@@ -5,6 +5,10 @@ const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_ANON_KEY
 );
+
+// Sempre iniciar o site sem uma sessão de aluno
+supabaseClient.auth.signOut();
+
 const seedBooks = [
   { id: 1, cover: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=700&q=85", genre: "Fantasia", title: "O Pequeno Príncipe", author: "Antoine de Saint-Exupéry", year: 1943, description: "Uma história delicada sobre amizade, afeto e o olhar curioso para o mundo." },
   { id: 2, cover: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=700&q=85", genre: "Ficção Científica", title: "1984", author: "George Orwell", year: 1949, description: "Um clássico sobre liberdade, vigilância e o poder de controlar a informação." },
@@ -38,7 +42,35 @@ const additionalBooks = Object.entries(additionalBookData).flatMap(([genre, titl
 const deletedBookKey = "bookeasy-deleted-books";
 let deletedBookIds = JSON.parse(localStorage.getItem(deletedBookKey) || "[]");
 let books = [...seedBooks, ...additionalBooks].filter((book) => !deletedBookIds.includes(book.id));
-books = [...books, ...JSON.parse(localStorage.getItem("bookeasy-extra-books") || "[]")];
+async function carregarLivrosDoSupabase() {
+    const { data, error } = await supabaseClient
+        .from("livros")
+        .select("*")
+        .order("id");
+
+    if (error) {
+        console.error("Erro ao carregar livros:", error);
+        return;
+    }
+
+    books = data.map((livro) => ({
+        id: livro.id,
+        title: livro.titulo,
+        author: livro.autor,
+        year: livro.ano,
+        genre: livro.genero,
+        description: livro.descricao,
+        cover: livro.capa,
+        status: livro.status
+    }));
+
+    featuredBooks = books.slice(0, 4);
+    recommendedBooks = books.slice(4, 12);
+
+    console.log("Livros carregados do Supabase:", books.length);
+
+    render();
+}
 const seedStudents = [
   { id: 1, name: "André Silva", className: "9º ano B", email: "andre.silva@sesi.edu.br" },
   { id: 2, name: "Beatriz Oliveira", className: "8º ano A", email: "beatriz.oliveira@sesi.edu.br" },
@@ -48,8 +80,12 @@ let students = [...seedStudents, ...JSON.parse(localStorage.getItem("bookeasy-ex
 const librarianSessionKey = "bookeasy-librarian-session";
 const studentSessionKey = "bookeasy-student-session";
 
-const featuredBooks = books.slice(0, 4);
-const recommendedBooks = books.slice(4, 12);
+// Sempre iniciar o site deslogado
+localStorage.removeItem(librarianSessionKey);
+localStorage.removeItem(studentSessionKey);
+
+let featuredBooks = [];
+let recommendedBooks = [];
 const reservationKey = "bookeasy-reservations";
 const requestKey = "bookeasy-reservation-requests";
 let reservations = JSON.parse(localStorage.getItem(reservationKey) || "[]");
@@ -212,17 +248,35 @@ function closeStudentModal() {
 
 let activeBookId = null;
 
-function deleteBook(id) {
+async function deleteBook(id) {
   const book = books.find((item) => item.id === id);
+
   if (!book || !window.confirm(`Excluir o livro ${book.title}?`)) return;
-  deletedBookIds = [...deletedBookIds, id];
-  localStorage.setItem(deletedBookKey, JSON.stringify(deletedBookIds));
+
+  const { error } = await supabaseClient
+    .from("livros")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.error("Erro ao excluir livro:", error);
+    alert("Erro ao excluir o livro.");
+    return;
+  }
+
   books = books.filter((item) => item.id !== id);
+
   reservations = reservations.filter((bookId) => bookId !== id);
   reservationRequests = reservationRequests.filter((bookId) => bookId !== id);
-  localStorage.setItem("bookeasy-extra-books", JSON.stringify(books.filter((item) => item.id > 8)));
-  saveReservations();
+
+  localStorage.setItem(reservationKey, JSON.stringify(reservations));
+  localStorage.setItem(requestKey, JSON.stringify(reservationRequests));
+
   closeBookAdminModal();
+  render();
+  renderAdmin();
+
+  console.log("Livro excluído do Supabase:", book);
 }
 
 function openBookAdminModal(id) {
@@ -366,32 +420,75 @@ document.querySelector("[data-focus-search]").addEventListener("click", (event) 
   if (open) document.querySelector("#header-search-input").focus();
 });
 
-document.querySelector("#librarian-login-form").addEventListener("submit", (event) => {
+document.querySelector("#librarian-login-form").addEventListener("submit", async (event) => {
   event.preventDefault();
+
   const form = new FormData(event.currentTarget);
-  const valid = form.get("username") === "bibliotecario" && form.get("password") === "bookeasy123";
+  const email = form.get("username");
+  const password = form.get("password");
   const message = document.querySelector("#login-message");
-  if (!valid) { message.textContent = "Usuário ou senha incorretos."; return; }
+
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    console.error("Erro ao fazer login:", error);
+    message.textContent = "E-mail ou senha incorretos.";
+    return;
+  }
+
+  console.log("Bibliotecário autenticado:", data.user);
+
   localStorage.setItem(librarianSessionKey, "true");
-  event.currentTarget.reset();
+
+  document.querySelector("#librarian-login-form").reset();
   message.textContent = "";
-  closeWithAnimation("#login-modal", () => document.body.classList.remove("modal-open"));
+
+  closeWithAnimation("#login-modal", () => {
+    document.body.classList.remove("modal-open");
+  });
+
   window.location.hash = "biblioteca";
   renderAdmin();
   showView("biblioteca");
 });
-document.querySelector("#student-login-form").addEventListener("submit", (event) => {
+document.querySelector("#student-login-form").addEventListener("submit", async (event) => {
   event.preventDefault();
-  const form = new FormData(event.currentTarget);
-  const valid = form.get("username") === "aluno" && form.get("password") === "bookeasy123";
+
+  const loginForm = event.currentTarget;
+
+  const form = new FormData(loginForm);
+  const email = String(form.get("username")).trim();
+  const password = String(form.get("password"));
   const message = document.querySelector("#student-login-message");
-  if (!valid) { message.textContent = "Usuário ou senha incorretos."; return; }
-  localStorage.setItem(studentSessionKey, "true");
-  updateStudentProfile();
-  document.querySelector("#student-login-notice").hidden = true;
-  event.currentTarget.reset();
+
   message.textContent = "";
-  closeWithAnimation("#student-login-modal", () => document.body.classList.remove("modal-open"));
+
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    console.error("Erro ao fazer login:", error);
+    message.textContent = "E-mail ou senha incorretos.";
+    return;
+  }
+
+  console.log("Aluno autenticado:", data.user);
+
+  localStorage.setItem(studentSessionKey, "true");
+
+  await updateStudentProfile();
+
+  loginForm.reset();
+
+  closeWithAnimation("#student-login-modal", () => {
+    document.body.classList.remove("modal-open");
+  });
+
   window.location.hash = "top";
   showView("top");
 });
@@ -415,43 +512,163 @@ function readImageFile(file) {
 }
 document.querySelector("#add-book-form").addEventListener("submit", async (event) => {
   event.preventDefault();
+
   const form = event.currentTarget;
-  const data = new FormData(event.currentTarget);
+  const data = new FormData(form);
   const fileCover = await readImageFile(data.get("coverFile"));
-  const newBook = { id: Date.now(), title: data.get("title"), author: data.get("author"), genre: data.get("genre"), cover: fileCover || data.get("cover") || "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=700&q=85", description: "Livro cadastrado pela equipe da biblioteca." };
-  newBook.year = Number(data.get("year"));
+
+  const newBook = {
+    id: Date.now(),
+    title: data.get("title"),
+    author: data.get("author"),
+    genre: data.get("genre"),
+    cover: fileCover || data.get("cover") || "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=700&q=85",
+    description: "Livro cadastrado pela equipe da biblioteca.",
+    year: Number(data.get("year")),
+    status: "Disponível"
+  };
+
+  const livroSupabase = {
+    id: newBook.id,
+    titulo: newBook.title,
+    autor: newBook.author,
+    ano: newBook.year || null,
+    genero: newBook.genre,
+    descricao: newBook.description,
+    capa: newBook.cover,
+    status: newBook.status
+  };
+
+  const { error } = await supabaseClient
+    .from("livros")
+    .insert(livroSupabase);
+
+  if (error) {
+    console.error("Erro ao cadastrar livro:", error);
+    document.querySelector("#book-form-message").textContent =
+      "Erro ao cadastrar livro.";
+    return;
+  }
+
   books.push(newBook);
-  localStorage.setItem("bookeasy-extra-books", JSON.stringify(books.filter((book) => book.id > 8)));
+
   form.reset();
-  document.querySelector("#book-form-message").textContent = "Livro cadastrado com sucesso.";
+  document.querySelector("#book-form-message").textContent =
+    "Livro cadastrado com sucesso.";
+
   render();
   renderAdmin();
+
+  console.log("Livro cadastrado no Supabase:", newBook);
 });
 document.querySelector("#edit-book-form").addEventListener("submit", async (event) => {
   event.preventDefault();
+
   const book = books.find((item) => item.id === activeBookId);
   if (!book) return;
+
   const data = new FormData(event.currentTarget);
   const fileCover = await readImageFile(data.get("coverFile"));
-  book.cover = fileCover || data.get("cover") || book.cover;
-  book.title = data.get("title");
-  book.author = data.get("author");
-  book.year = Number(data.get("year"));
-  localStorage.setItem("bookeasy-extra-books", JSON.stringify(books.filter((item) => item.id > 8)));
+
+  const updatedBook = {
+    title: data.get("title"),
+    author: data.get("author"),
+    year: Number(data.get("year")),
+    cover: fileCover || data.get("cover") || book.cover
+  };
+
+  const { error } = await supabaseClient
+    .from("livros")
+    .update({
+      titulo: updatedBook.title,
+      autor: updatedBook.author,
+      ano: updatedBook.year || null,
+      capa: updatedBook.cover
+    })
+    .eq("id", book.id);
+
+  if (error) {
+    console.error("Erro ao editar livro:", error);
+    document.querySelector("#book-edit-message").textContent =
+      "Erro ao salvar alterações.";
+    return;
+  }
+
+  book.title = updatedBook.title;
+  book.author = updatedBook.author;
+  book.year = updatedBook.year;
+  book.cover = updatedBook.cover;
+
   document.querySelector("#book-admin-title").textContent = book.title;
-  document.querySelector("#book-edit-message").textContent = "Alterações salvas com sucesso.";
+  document.querySelector("#book-edit-message").textContent =
+    "Alterações salvas com sucesso.";
+
   render();
   renderAdmin();
+
+  console.log("Livro atualizado no Supabase:", book);
 });
-document.querySelector("#add-student-form").addEventListener("submit", (event) => {
+document.querySelector("#add-student-form").addEventListener("submit", async (event) => {
   event.preventDefault();
+
   const data = new FormData(event.currentTarget);
-  const newStudent = { id: Date.now(), name: data.get("name"), className: data.get("className"), email: data.get("email") };
-  students.push(newStudent);
-  localStorage.setItem("bookeasy-extra-students", JSON.stringify(students.filter((student) => student.id)));
+
+  const name = data.get("name");
+  const className = data.get("className");
+  const email = data.get("email");
+  const password = data.get("password");
+
+  const message = document.querySelector("#student-form-message");
+  message.textContent = "Cadastrando aluno...";
+
+  // 1. Cria a conta de autenticação
+  const { data: authData, error: authError } =
+    await supabaseClient.auth.signUp({
+      email,
+      password
+    });
+
+  if (authError) {
+    console.error("Erro ao criar conta:", authError);
+    message.textContent = authError.message;
+    return;
+  }
+
+  // 2. Salva os dados do aluno na tabela estudantes
+  const newStudent = {
+    nome: name,
+    turma: className,
+    email: email,
+    usuario_id: authData.user.id
+  };
+
+  const { data: student, error: studentError } = await supabaseClient
+    .from("estudantes")
+    .insert(newStudent)
+    .select()
+    .single();
+
+  if (studentError) {
+    console.error("Erro ao cadastrar estudante:", studentError);
+    message.textContent = "A conta foi criada, mas não foi possível salvar os dados do aluno.";
+    return;
+  }
+
+  students.push({
+    id: student.id,
+    name: student.nome,
+    className: student.turma,
+    email: student.email,
+    usuario_id: student.usuario_id
+  });
+
   event.currentTarget.reset();
-  document.querySelector("#student-form-message").textContent = "Aluno cadastrado com sucesso.";
+
+  message.textContent = "Aluno cadastrado com sucesso.";
+
   renderAdmin();
+
+  console.log("Aluno cadastrado:", student);
 });
 document.querySelector("#edit-student-form").addEventListener("submit", (event) => {
   event.preventDefault();
@@ -469,14 +686,49 @@ document.querySelector("#edit-student-form").addEventListener("submit", (event) 
 
 const profileButton = document.querySelector(".profile-button");
 const profilePanel = document.querySelector("#profile-panel");
-const updateStudentProfile = () => {
-  const authenticated = localStorage.getItem(studentSessionKey) === "true";
-  document.querySelectorAll("[data-student-account]").forEach((element) => { element.hidden = !authenticated; });
+
+const updateStudentProfile = async () => {
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
+
+  const authenticated = !!user;
+
+  document.querySelectorAll("[data-student-account]").forEach((element) => {
+    element.hidden = !authenticated;
+  });
+
   document.querySelector("#student-profile-login").hidden = authenticated;
   document.querySelector("#student-login-notice").hidden = authenticated;
+
   profilePanel.classList.toggle("logged-out", !authenticated);
+
+  if (!authenticated) {
+    localStorage.removeItem(studentSessionKey);
+    return;
+  }
+
+  localStorage.setItem(studentSessionKey, "true");
+
+  const { data: student, error } = await supabaseClient
+    .from("estudantes")
+    .select("*")
+    .eq("usuario_id", user.id)
+    .single();
+
+  if (error) {
+    console.error("Erro ao carregar estudante:", error);
+    return;
+  }
+
+  console.log("Estudante logado:", student);
+
+  document.querySelector("#student-profile-name").textContent = student.nome;
+  document.querySelector("#student-profile-class").textContent = student.turma;
+
+  const avatar = document.querySelector("#student-profile-avatar");
+  avatar.textContent = student.nome.charAt(0).toUpperCase();
 };
-updateStudentProfile();
 profileButton.addEventListener("click", (event) => {
   event.stopPropagation();
   const open = profileButton.getAttribute("aria-expanded") === "true";
@@ -485,13 +737,19 @@ profileButton.addEventListener("click", (event) => {
   profilePanel.classList.toggle("open", !open);
 });
 document.addEventListener("click", () => { profileButton.setAttribute("aria-expanded", "false"); profilePanel.setAttribute("aria-hidden", "true"); profilePanel.classList.remove("open"); });
-document.querySelector("#student-logout").addEventListener("click", (event) => {
+document.querySelector("#student-logout").addEventListener("click", async (event) => {
   event.stopPropagation();
+
+  await supabaseClient.auth.signOut();
+
   localStorage.removeItem(studentSessionKey);
-  updateStudentProfile();
+
   profileButton.setAttribute("aria-expanded", "false");
   profilePanel.setAttribute("aria-hidden", "true");
   profilePanel.classList.remove("open");
+
+  updateStudentProfile();
+
   window.location.hash = "top";
 });
 document.querySelector("#student-profile-login").addEventListener("click", (event) => {
@@ -512,6 +770,7 @@ render();
 renderAdmin();
 showView(window.location.hash.slice(1));
 updateStudentProfile();
+carregarLivrosDoSupabase();
 
 async function testarSupabase() {
   const { data, error } = await supabaseClient
