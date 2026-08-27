@@ -528,3 +528,29 @@ async function testarSupabase() {
 }
 
 testarSupabase();
+
+async function migrarLivrosParaSupabase() {
+    const livros = books.map((book) => ({
+        id: book.id,
+        titulo: book.title,
+        autor: book.author,
+        ano: book.year || null,
+        genero: book.genre,
+        descricao: book.description || null,
+        capa: book.cover,
+        status: book.status || "Disponível"
+    }));
+
+    const { data, error } = await supabaseClient
+        .from("livros")
+        .upsert(livros, { onConflict: "id" });
+
+    if (error) {
+        console.error("Erro ao migrar livros:", error);
+        return;
+    }
+
+    console.log("Livros migrados com sucesso!", data);
+}
+
+migrarLivrosParaSupabase();
