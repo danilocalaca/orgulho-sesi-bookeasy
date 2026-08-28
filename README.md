@@ -175,7 +175,6 @@ O banco de dados utiliza **Row Level Security (RLS)** do Supabase para controlar
 | **Figma** | Prototipação e design das interfaces |
 | **GitHub** | Versionamento e armazenamento do projeto |
 | **Visual Studio Code** | Desenvolvimento do sistema |
-| **Lovable** | Apoio no desenvolvimento e prototipação |
 
 ---
 
