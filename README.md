@@ -1,337 +1,212 @@
 # BookEasy 📚
 
-**BookEasy** é um sistema web desenvolvido para facilitar o gerenciamento da biblioteca escolar, permitindo que os alunos pesquisem e reservem livros, enquanto bibliotecários e responsáveis pela escola realizam o gerenciamento do acervo e dos empréstimos.
+O **BookEasy** é um sistema web desenvolvido para facilitar o gerenciamento da biblioteca escolar. A plataforma permite que os alunos consultem o acervo e solicitem reservas de livros, enquanto o bibliotecário pode gerenciar os livros, alunos e reservas.
 
-O projeto está sendo desenvolvido por uma equipe de 9 alunos do **SESI Paulista** e será apresentado no evento **Orgulho de Ser SESI**, com a proposta de transformar o gerenciamento da biblioteca em um processo mais organizado, prático e digital.
-
----
-
-## Objetivo
-
-O principal objetivo do BookEasy é **melhorar o gerenciamento da biblioteca escolar**, centralizando informações sobre livros, reservas e empréstimos em uma única plataforma.
-
-Com o sistema, os alunos poderão encontrar livros com mais facilidade e realizar reservas, enquanto o bibliotecário terá ferramentas para manter o acervo organizado e controlar os empréstimos e devoluções.
+O projeto foi desenvolvido por uma equipe de 9 alunos do **SESI Paulista** e será apresentado no evento **Orgulho de Ser SESI**.
 
 ---
 
-## Público-alvo
+## 🎯 Objetivo
 
-O BookEasy será utilizado principalmente por três grupos:
+O principal objetivo do BookEasy é tornar o gerenciamento da biblioteca escolar mais organizado, prático e acessível.
 
-### Alunos
-
-Os alunos utilizarão a plataforma para consultar o acervo e realizar reservas.
-
-Entre as principais ações estão:
-
-* Fazer login utilizando uma conta criada pela escola;
-* Pesquisar livros;
-* Visualizar categorias;
-* Consultar informações dos livros;
-* Reservar livros disponíveis;
-* Visualizar suas reservas.
-
-### Bibliotecários
-
-O bibliotecário será o principal responsável pelo gerenciamento da biblioteca através do sistema.
-
-Será possível:
-
-* Cadastrar livros;
-* Editar informações dos livros;
-* Excluir livros;
-* Registrar empréstimos;
-* Registrar devoluções;
-* Gerenciar o acervo;
-* Acompanhar as reservas.
-
-### Escola
-
-Coordenadores, estagiários, administradores e outros responsáveis autorizados pela escola terão acesso às principais funções de gerenciamento.
-
-As permissões serão semelhantes às do bibliotecário, porém o gerenciamento cotidiano da biblioteca será realizado prioritariamente pelo bibliotecário.
+O sistema centraliza as informações dos livros e alunos, permitindo que os estudantes encontrem livros com facilidade e realizem solicitações de reserva, enquanto o bibliotecário possui uma área própria para administrar o acervo e acompanhar as reservas.
 
 ---
 
-## Funcionalidades
+## 👥 Público-alvo
 
-### Para alunos
+O BookEasy possui dois principais tipos de usuários:
 
-* Login no sistema;
-* Pesquisa de livros;
-* Visualização do acervo;
-* Navegação por categorias;
-* Visualização dos detalhes de um livro;
-* Reserva de livros;
-* Visualização das reservas realizadas.
+### 📚 Alunos
 
-### Para bibliotecários
+Os alunos podem:
 
-* Acesso ao painel de gerenciamento;
-* Cadastro de livros;
-* Edição de livros;
-* Exclusão de livros;
-* Registro de empréstimos;
-* Registro de devoluções;
-* Gerenciamento do acervo;
-* Controle das reservas.
+- Criar uma conta utilizando os dados fornecidos pela escola;
+- Fazer login no sistema;
+- Pesquisar livros;
+- Navegar pelas categorias;
+- Visualizar informações dos livros;
+- Solicitar reservas;
+- Cancelar solicitações;
+- Visualizar suas reservas;
+- Acessar seu perfil.
 
-### Para a escola
+### 🧑‍💼 Bibliotecário
 
-* Acesso administrativo;
-* Gerenciamento do acervo;
-* Cadastro, edição e exclusão de livros;
-* Registro de empréstimos;
-* Registro de devoluções;
-* Gerenciamento das reservas.
+O bibliotecário possui acesso ao painel administrativo e pode:
 
- As funcionalidades poderão ser aprimoradas durante o desenvolvimento do projeto.
-
- ---
-
-## Telas do sistema
-
-O BookEasy contará inicialmente com as seguintes telas:
-
-### Tela de Login
-
-Área de acesso ao sistema. Os alunos utilizarão contas criadas pela escola para entrar na plataforma.
-
-### Página Inicial
-
-Página principal do BookEasy, apresentando o sistema e facilitando o acesso às principais funções da biblioteca.
-
-### Livros
-
-Área destinada à consulta do acervo, permitindo que os alunos pesquisem e encontrem livros disponíveis.
-
-### Detalhes do Livro
-
-Página com informações específicas de um livro, permitindo ao usuário conhecer melhor a obra e realizar uma reserva quando disponível.
-
-### Minhas Reservas
-
-Área onde o aluno poderá consultar os livros que reservou.
-
-### Painel do Bibliotecário
-
-Área administrativa destinada ao gerenciamento da biblioteca, permitindo controlar livros, empréstimos, devoluções e outras operações do acervo.
-
-### Cadastro de Livros
-
-Tela destinada ao cadastro de novos livros no sistema.
+- Fazer login como bibliotecário;
+- Visualizar o acervo;
+- Cadastrar livros;
+- Editar informações dos livros;
+- Excluir livros;
+- Cadastrar alunos;
+- Editar informações dos alunos;
+- Excluir alunos;
+- Visualizar as solicitações de reserva;
+- Aprovar reservas;
+- Recusar solicitações;
+- Cancelar reservas;
+- Acompanhar a quantidade de livros, alunos e reservas.
 
 ---
 
-## Design e experiência do usuário
+## ⚙️ Funcionalidades
 
-O BookEasy terá uma interface **simples**, **moderna** e **intuitiva**, buscando facilitar a utilização por diferentes tipos de usuários.
+### Sistema de livros
 
-A identidade visual será inspirada em conceitos de design presentes em plataformas como **Apple** e **Nike**, priorizando:
+- Cadastro de livros;
+- Edição de livros;
+- Exclusão de livros;
+- Pesquisa por título, autor ou categoria;
+- Filtro por gênero;
+- Ordenação do acervo;
+- Visualização dos detalhes dos livros;
+- Controle do status dos livros;
+- Adição de capas através de links ou arquivos de imagem.
 
-* Interface limpa
-* Organização das informações
-* Facilidade de navegação
-* Hierarquia visual
-* Design moderno
-* Responsividade
-* Experiência do usuário
-  
-O protótipo das interfaces será desenvolvido utilizando **Figma**, antes da implementação do sistema.
+### Sistema de alunos
 
-### Preview
+- Cadastro de alunos;
+- Login através do sistema de autenticação;
+- Visualização do perfil;
+- Edição de informações;
+- Exclusão de cadastro;
+- Associação do aluno à sua conta de usuário.
 
-Os screenshots do sistema serão adicionados nesta seção após a conclusão do protótipo e das primeiras versões funcionais.
+### Sistema de reservas
 
-**Tela inicial**
-
-`[Imagem da tela inicial será adicionada aqui]`
-
-**Página de livros**
-
-`[Imagem da página de livros será adicionada aqui]`
-
-**Detalhes do livro**
-
-`[Imagem da tela de detalhes será adicionada aqui]`
-
-**Painel do bibliotecário**
-
-`[Imagem do painel será adicionada aqui]`
+- Solicitação de reserva;
+- Cancelamento de solicitação;
+- Aprovação de reservas pelo bibliotecário;
+- Recusa de solicitações;
+- Cancelamento de reservas;
+- Visualização das reservas realizadas.
 
 ---
 
-## Tecnologias utilizadas
+## 🖥️ Telas do sistema
 
-O desenvolvimento do BookEasy utilizará diferentes tecnologias e ferramentas:
+O BookEasy possui as seguintes áreas principais:
 
-| Tecnologia/Ferramenta | Utilização                                      |
-| --------------------- | ----------------------------------------------- |
-| **HTML**              | Estrutura das páginas                           |
-| **CSS**               | Estilização e identidade visual                 |
-| **JavaScript**        | Interatividade e funcionalidades do sistema     |
-| **Python**            | Desenvolvimento e integração de funcionalidades |
-| **PHP**               | Desenvolvimento das funcionalidades web         |
-| **MySQL**             | Banco de dados                                  |
-| **Figma**             | Prototipação e design das interfaces            |
-| **GitHub**            | Armazenamento e gerenciamento do projeto        |
-| **Lovable**           | Apoio no desenvolvimento e prototipação         |
+### Tela inicial
 
----
+Página principal do sistema, apresentando o acervo, destaques, categorias e opções de pesquisa.
 
-## Banco de dados
+### Explorar livros
 
-O BookEasy utilizará **MySQL** para armazenar e organizar os dados necessários para o funcionamento do sistema.
+Área destinada à pesquisa e navegação pelo catálogo de livros.
 
-Entre as informações que deverão ser gerenciadas estão:
+### Detalhes do livro
 
-* Usuários
-* Livros
-* Categorias
-* Reservas
-* Empréstimos
-* Devoluções
-* Informações relacionadas ao acervo
+Exibe informações como:
 
-A estrutura do banco de dados será desenvolvida buscando manter os dados organizados e permitir que o sistema consulte e atualize as informações de maneira eficiente.
+- Capa;
+- Título;
+- Autor;
+- Ano de lançamento;
+- Gênero;
+- Descrição;
+- Status do livro.
 
----
+### Minhas reservas
 
-## Equipe
+Área onde o aluno pode acompanhar suas solicitações e reservas.
 
-O desenvolvimento do BookEasy conta com uma equipe de **9 integrantes**, dividida em diferentes áreas:
+### Login do aluno
 
-| Integrante  | Função                               | Usuário          |
-| ----------- | ------------------------------------ | ---------------- |
-| **Danilo**  | Gerente de Projetos / Designer UX/UI | <a href="https://github.com/danilocalaca">@danilocalaca</a>                 |
-| **Breno**   | Design do site                       | <a href="https://github.com/brenorck">@brenorck</a>                 |
-| **Nicolas** | Design do site                       | <a href="https://github.com/danilocalaca">@</a>                 |
-| **Gustavo** | Banco de dados / Responsividade      | <a href="https://github.com/danilocalaca">@</a>                 |
-| **Pedro**   | Banco de dados / Responsividade      | <a href="https://github.com/danilocalaca">@</a>                 |
-| **Marcos**  | Integração do projeto                | <a href="https://github.com/danilocalaca">@</a>                 |
-| **Jalson**  | Integração do projeto                | <a href="https://github.com/jalsinho">@jalsinho</a>                 |
-| **Tarciso** | Apresentação / Slides                | <a href="https://github.com/danilocalaca">@</a>                 |
-| **Victor**  | Apresentação / Slides                | <a href="https://github.com/victortheeng">@victortheeng</a>                 |
+Área de autenticação utilizada pelos alunos para acessar suas contas.
 
-A divisão das funções permite que diferentes áreas do projeto sejam desenvolvidas simultaneamente, desde o design e banco de dados até a integração e apresentação.
+### Login do bibliotecário
+
+Área de acesso ao painel administrativo.
+
+### Painel do bibliotecário
+
+Área administrativa para gerenciamento dos livros, alunos e reservas.
+
+### Cadastro de livros
+
+Tela utilizada para adicionar novos livros ao acervo.
+
+### Cadastro de alunos
+
+Tela utilizada para cadastrar novos alunos no sistema.
 
 ---
 
-## Desenvolvimento
+## 🗄️ Banco de dados
 
-O projeto será desenvolvido ao longo de aproximadamente **um mês**, com foco em transformar o planejamento inicial em um sistema funcional.
+O BookEasy utiliza o **Supabase** como backend e banco de dados.
 
-Até o momento, a equipe já concluiu:
+O banco é responsável pelo armazenamento das informações utilizadas pelo sistema, incluindo:
 
-✅ Definição da ideia  
-✅ Pesquisa  
-✅ Levantamento de requisito  
+- Livros;
+- Alunos;
+- Usuários;
+- Reservas;
+- Informações do acervo.
 
-As próximas etapas serão:
+O sistema também utiliza o **Supabase Auth** para realizar a autenticação dos usuários.
 
-* Criação do protótipo
-* Desenvolvimento das interface
-*  Desenvolvimento das funcionalidades
-* Implementação do banco de dados
-* Integração dos componentes
-* Testes
-* Correção de problemas
-* Preparação da apresentação
-* Apresentação do projeto
-
-A apresentação está prevista para o dia **28 de agosto de 2026**.
+A comunicação entre o site e o banco de dados é realizada através da biblioteca **Supabase JavaScript**.
 
 ---
 
-## Etapas do projeto
+## 🔐 Autenticação e segurança
 
-### 1.Ideia
+O sistema possui autenticação para diferentes tipos de usuários.
 
-Identificação da necessidade de melhorar a organização e o gerenciamento da biblioteca escolar.
+Os alunos utilizam suas contas para acessar suas informações e realizar reservas, enquanto o bibliotecário possui acesso à área administrativa.
 
-### 2.Pesquisa
-
-Pesquisa sobre bibliotecas, sistemas de gerenciamento e possíveis soluções para facilitar o acesso dos alunos ao acervo.
-
-### 3.Levantamento de requisitos
-
-Definição dos usuários do sistema, suas necessidades, permissões e principais funcionalidades.
-
-### 4.Prototipação
-
-Criação das interfaces e definição da experiência de navegação do usuário através do Figma.
-
-### 5.Desenvolvimento
-
-Implementação das telas, funcionalidades e estrutura do sistema utilizando as tecnologias escolhidas pela equipe.
-
-### 6.Banco de dados
-
-Desenvolvimento da estrutura responsável pelo armazenamento e gerenciamento das informações do sistema.
-
-### 7.Integração
-
-Integração entre as interfaces, funcionalidades e banco de dados.
-
-### 8.Testes
-
-Testes das principais funções do sistema, identificação de erros e realização de correções.
-
-### 9.Apresentação
-
-Preparação da demonstração do BookEasy e apresentação do projeto no dia **28 de agosto de 2026**.
+O banco de dados utiliza **Row Level Security (RLS)** do Supabase para controlar o acesso às informações.
 
 ---
 
-## Resultado esperado
+## 🛠️ Tecnologias utilizadas
 
-Ao final do desenvolvimento, espera-se que o BookEasy seja um **sistema funcional de gerenciamento de biblioteca escolar**, capaz de organizar digitalmente o acervo e facilitar o acesso dos alunos aos livros.
-
-O sistema deverá permitir que:
-
-* Os alunos encontrem livros com facilidade;
-* Os alunos realizem reservas;
-* O acervo seja mantido organizado;
-* Os empréstimos e devoluções sejam registrados;
-* O bibliotecário tenha maior controle sobre a biblioteca;
-* A escola tenha acesso às informações necessárias para acompanhar o funcionamento da biblioteca.
-
-A proposta é reduzir a dependência de processos manuais e tornar o gerenciamento da biblioteca **mais organizado, acessível e eficiente**.
+| Tecnologia/Ferramenta | Utilização |
+| --------------------- | ---------- |
+| **HTML5** | Estrutura das páginas |
+| **CSS3** | Estilização e identidade visual |
+| **JavaScript** | Funcionalidades e interatividade |
+| **Supabase** | Banco de dados e autenticação |
+| **Figma** | Prototipação e design das interfaces |
+| **GitHub** | Versionamento e armazenamento do projeto |
+| **Visual Studio Code** | Desenvolvimento do sistema |
+| **Lovable** | Apoio no desenvolvimento e prototipação |
 
 ---
 
-## Impacto esperado
+## 🎨 Design e experiência do usuário
 
-Além de solucionar uma necessidade prática da biblioteca, o BookEasy busca demonstrar como a tecnologia pode ser aplicada para melhorar processos presentes no ambiente escolar.
+O BookEasy foi desenvolvido buscando uma interface:
 
-A plataforma pretende aproximar os alunos dos livros e, ao mesmo tempo, fornecer aos responsáveis pela biblioteca uma ferramenta para facilitar sua rotina.
+- Simples;
+- Moderna;
+- Intuitiva;
+- Responsiva;
+- Fácil de navegar.
 
----
+A identidade visual teve como inspiração conceitos presentes em plataformas como **Apple** e **Nike**, priorizando uma interface limpa, boa organização das informações e hierarquia visual.
 
-## Cronograma
-
-| Etapa                      | Status                |
-| -------------------------- | --------------------- |
-| Ideia                      | ✅ Concluído           |
-| Pesquisa                   | ✅ Concluído           |
-| Levantamento de requisitos | ✅ Concluído           |
-| Protótipo                  |  Em desenvolvimento |
-| Desenvolvimento            |  Próxima etapa       |
-| Banco de dados             |  Em desenvolvimento  |
-| Integração                 |  Pendente            |
-| Testes                     |  Pendente            |
-| Apresentação               |  28/08/2026         |
+O protótipo e o planejamento das interfaces foram desenvolvidos utilizando o **Figma**.
 
 ---
 
-##  Status do projeto
+## 📁 Estrutura do projeto
 
-**Em desenvolvimento**
-
-O projeto encontra-se na fase de transição entre o planejamento e a implementação. O próximo foco da equipe é finalizar o protótipo e iniciar o desenvolvimento do sistema funcional.
-
----
-
-## Projeto escolar
-
-O BookEasy é um projeto desenvolvido no contexto escolar do **SESI Paulista** e será apresentado no evento **Orgulho de Ser SESI**.
+```text
+BookEasy/
+│
+├── index.html
+├── style.css
+├── script.js
+├── README.md
+│
+├── docs/
+│   ├── diagrama-caso-de-uso.md
+│   └── ...
+│
+└── ...
