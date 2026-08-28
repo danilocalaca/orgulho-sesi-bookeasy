@@ -6,8 +6,6 @@ const supabaseClient = window.supabase.createClient(
     SUPABASE_ANON_KEY
 );
 
-// Sempre iniciar o site sem uma sessão de aluno
-supabaseClient.auth.signOut();
 
 const seedBooks = [
   { id: 1, cover: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&w=700&q=85", genre: "Fantasia", title: "O Pequeno Príncipe", author: "Antoine de Saint-Exupéry", year: 1943, description: "Uma história delicada sobre amizade, afeto e o olhar curioso para o mundo." },
@@ -71,18 +69,34 @@ async function carregarLivrosDoSupabase() {
 
     render();
 }
-const seedStudents = [
-  { id: 1, name: "André Silva", className: "9º ano B", email: "andre.silva@sesi.edu.br" },
-  { id: 2, name: "Beatriz Oliveira", className: "8º ano A", email: "beatriz.oliveira@sesi.edu.br" },
-  { id: 3, name: "Caio Santos", className: "9º ano A", email: "caio.santos@sesi.edu.br" }
-];
-let students = [...seedStudents, ...JSON.parse(localStorage.getItem("bookeasy-extra-students") || "[]")];
+let students = [];
+async function carregarEstudantesDoSupabase() {
+  const { data, error } = await supabaseClient
+    .from("estudantes")
+    .select("*")
+    .order("id");
+
+  if (error) {
+    console.error("Erro ao carregar estudantes:", error);
+    return;
+  }
+
+  students = data.map((student) => ({
+    id: student.id,
+    name: student.nome,
+    className: student.turma,
+    email: student.email,
+    usuario_id: student.usuario_id
+  }));
+
+  console.log("Estudantes carregados do Supabase:", students.length);
+
+  renderAdmin();
+}
 const librarianSessionKey = "bookeasy-librarian-session";
 const studentSessionKey = "bookeasy-student-session";
 
-// Sempre iniciar o site deslogado
-localStorage.removeItem(librarianSessionKey);
-localStorage.removeItem(studentSessionKey);
+
 
 let featuredBooks = [];
 let recommendedBooks = [];
@@ -206,22 +220,42 @@ function renderAdmin() {
   });
 }
 
-function deleteStudent(id) {
+async function deleteStudent(id) {
   const student = students.find((item) => item.id === id);
-  if (!student || !window.confirm(`Excluir o cadastro de ${student.name}?`)) return;
+
+  if (!student) return;
+
+  if (!window.confirm(`Excluir o cadastro de ${student.name}?`)) {
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("estudantes")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.error("Erro ao excluir estudante:", error);
+    document.querySelector("#student-edit-message").textContent =
+      "Erro ao excluir o aluno.";
+    return;
+  }
+
   students = students.filter((item) => item.id !== id);
-  localStorage.setItem("bookeasy-extra-students", JSON.stringify(students.filter((item) => item.id > 3)));
+
   closeStudentModal();
   renderAdmin();
+
+  console.log("Aluno excluído do Supabase:", student);
 }
 
 function openStudentModal(id) {
   const student = students.find((item) => item.id === id);
   if (!student) return;
   activeStudentId = id;
-  const studentReservations = reservations.filter((bookId) => books.some((book) => book.id === bookId));
   document.querySelector("#student-modal-title").textContent = student.name;
-  document.querySelector("#student-modal-reservations").textContent = student.name === "André Silva" ? `${studentReservations.length} ativa(s)` : "Nenhuma";
+  document.querySelector("#student-modal-reservations").textContent =
+  "Nenhuma";
   document.querySelector('#edit-student-form input[name="name"]').value = student.name;
   document.querySelector('#edit-student-form input[name="className"]').value = student.className;
   document.querySelector('#edit-student-form input[name="email"]').value = student.email;
@@ -345,7 +379,6 @@ function showView(view) {
   document.querySelectorAll("main > section:not(.app-view)").forEach((section) => { section.hidden = !isHome; });
   document.querySelectorAll(".main-nav a").forEach((link) => link.classList.toggle("active", (isHome && link.dataset.view === "home") || link.getAttribute("href") === `#${view}`));
   if (!isHome) document.querySelector(`#${view}`).scrollIntoView({ block: "start" });
-  if (typeof updateStudentProfile === "function") updateStudentProfile();
 }
 
 function submitSearch(query) {
@@ -451,7 +484,7 @@ document.querySelector("#librarian-login-form").addEventListener("submit", async
   });
 
   window.location.hash = "biblioteca";
-  renderAdmin();
+  await carregarEstudantesDoSupabase();
   showView("biblioteca");
 });
 document.querySelector("#student-login-form").addEventListener("submit", async (event) => {
@@ -483,7 +516,9 @@ document.querySelector("#student-login-form").addEventListener("submit", async (
 
   await updateStudentProfile();
 
+  if (loginForm) {
   loginForm.reset();
+}
 
   closeWithAnimation("#student-login-modal", () => {
     document.body.classList.remove("modal-open");
@@ -492,9 +527,14 @@ document.querySelector("#student-login-form").addEventListener("submit", async (
   window.location.hash = "top";
   showView("top");
 });
-document.querySelector("#librarian-logout").addEventListener("click", () => {
+document.querySelector("#librarian-logout").addEventListener("click", async () => {
+  await supabaseClient.auth.signOut();
+
   localStorage.removeItem(librarianSessionKey);
+  localStorage.removeItem(studentSessionKey);
+
   window.location.hash = "top";
+  updateStudentProfile();
 });
 document.querySelector("#student-login-notice").addEventListener("click", (event) => {
   event.preventDefault();
@@ -611,83 +651,147 @@ document.querySelector("#edit-book-form").addEventListener("submit", async (even
 document.querySelector("#add-student-form").addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  const data = new FormData(event.currentTarget);
+  const form = event.currentTarget;
+  const data = new FormData(form);
 
-  const name = data.get("name");
-  const className = data.get("className");
-  const email = data.get("email");
-  const password = data.get("password");
+  const name = String(data.get("name")).trim();
+  const className = String(data.get("className")).trim();
+  const email = String(data.get("email")).trim();
+  const password = String(data.get("password"));
 
   const message = document.querySelector("#student-form-message");
+
   message.textContent = "Cadastrando aluno...";
 
-  // 1. Cria a conta de autenticação
-  const { data: authData, error: authError } =
-    await supabaseClient.auth.signUp({
-      email,
-      password
+  try {
+    // Cria o aluno no Authentication
+    const { data: authData, error: authError } =
+      await supabaseClient.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          data: {
+            nome: name,
+            turma: className
+          }
+        }
+      });
+
+    if (authError) {
+      console.error("Erro ao criar conta:", authError);
+      message.textContent = authError.message;
+      return;
+    }
+
+    if (!authData.user) {
+      message.textContent = "Não foi possível criar a conta do aluno.";
+      return;
+    }
+
+    // Salva o aluno na tabela estudantes
+    const newStudent = {
+      nome: name,
+      turma: className,
+      email: email,
+      usuario_id: authData.user.id
+    };
+
+    const { data: student, error: studentError } =
+      await supabaseClient
+        .from("estudantes")
+        .insert(newStudent)
+        .select()
+        .single();
+
+    if (studentError) {
+      console.error("Erro ao cadastrar estudante:", studentError);
+      message.textContent =
+        "A conta foi criada, mas não foi possível salvar o aluno.";
+      return;
+    }
+
+    // Adiciona na lista da página
+    students.push({
+      id: student.id,
+      name: student.nome,
+      className: student.turma,
+      email: student.email,
+      usuario_id: student.usuario_id
     });
 
-  if (authError) {
-    console.error("Erro ao criar conta:", authError);
-    message.textContent = authError.message;
-    return;
-  }
+    form.reset();
 
-  // 2. Salva os dados do aluno na tabela estudantes
-  const newStudent = {
-    nome: name,
-    turma: className,
-    email: email,
-    usuario_id: authData.user.id
+    message.textContent = "Aluno cadastrado com sucesso!";
+
+    renderAdmin();
+
+    console.log("Aluno cadastrado:", student);
+
+  } catch (error) {
+    console.error("Erro inesperado ao cadastrar aluno:", error);
+    message.textContent = "Ocorreu um erro ao cadastrar o aluno.";
+  }
+});
+document.querySelector("#edit-student-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const student = students.find((item) => item.id === activeStudentId);
+
+  if (!student) return;
+
+  const data = new FormData(event.currentTarget);
+
+  const updatedStudent = {
+    nome: data.get("name"),
+    turma: data.get("className"),
+    email: data.get("email")
   };
 
-  const { data: student, error: studentError } = await supabaseClient
+  const { error } = await supabaseClient
     .from("estudantes")
-    .insert(newStudent)
-    .select()
-    .single();
+    .update(updatedStudent)
+    .eq("id", student.id);
 
-  if (studentError) {
-    console.error("Erro ao cadastrar estudante:", studentError);
-    message.textContent = "A conta foi criada, mas não foi possível salvar os dados do aluno.";
+  if (error) {
+    console.error("Erro ao atualizar estudante:", error);
+
+    document.querySelector("#student-edit-message").textContent =
+      "Erro ao salvar alterações.";
+
     return;
   }
 
-  students.push({
-    id: student.id,
-    name: student.nome,
-    className: student.turma,
-    email: student.email,
-    usuario_id: student.usuario_id
-  });
+  student.name = updatedStudent.nome;
+  student.className = updatedStudent.turma;
+  student.email = updatedStudent.email;
 
-  event.currentTarget.reset();
+  document.querySelector("#student-modal-title").textContent =
+    student.name;
 
-  message.textContent = "Aluno cadastrado com sucesso.";
+  document.querySelector("#student-edit-message").textContent =
+    "Alterações salvas com sucesso.";
 
   renderAdmin();
 
-  console.log("Aluno cadastrado:", student);
-});
-document.querySelector("#edit-student-form").addEventListener("submit", (event) => {
-  event.preventDefault();
-  const student = students.find((item) => item.id === activeStudentId);
-  if (!student) return;
-  const data = new FormData(event.currentTarget);
-  student.name = data.get("name");
-  student.className = data.get("className");
-  student.email = data.get("email");
-  localStorage.setItem("bookeasy-extra-students", JSON.stringify(students.filter((item) => item.id > 3)));
-  document.querySelector("#student-modal-title").textContent = student.name;
-  document.querySelector("#student-edit-message").textContent = "Alterações salvas com sucesso.";
-  renderAdmin();
+  console.log("Aluno atualizado no Supabase:", student);
 });
 
 const profileButton = document.querySelector(".profile-button");
 const profilePanel = document.querySelector("#profile-panel");
 
 const updateStudentProfile = async () => {
+  if (localStorage.getItem(librarianSessionKey) === "true") {
+    document.querySelectorAll("[data-student-account]").forEach((element) => {
+    element.hidden = true;
+    });
+
+    document.querySelector("#student-profile-login").hidden = true;
+    document.querySelector("#student-login-notice").hidden = true;
+
+    profilePanel.classList.remove("logged-out");
+
+    return;
+  }
   const {
     data: { user }
   } = await supabaseClient.auth.getUser();
@@ -708,16 +812,19 @@ const updateStudentProfile = async () => {
     return;
   }
 
-  localStorage.setItem(studentSessionKey, "true");
-
   const { data: student, error } = await supabaseClient
-    .from("estudantes")
-    .select("*")
-    .eq("usuario_id", user.id)
-    .single();
+  .from("estudantes")
+  .select("*")
+  .eq("usuario_id", user.id)
+  .maybeSingle();
 
   if (error) {
     console.error("Erro ao carregar estudante:", error);
+    return;
+  }
+
+  if (!student) {
+    console.warn("Usuário autenticado não possui cadastro na tabela estudantes.");
     return;
   }
 
@@ -771,6 +878,7 @@ renderAdmin();
 showView(window.location.hash.slice(1));
 updateStudentProfile();
 carregarLivrosDoSupabase();
+carregarEstudantesDoSupabase();
 
 async function testarSupabase() {
   const { data, error } = await supabaseClient
@@ -811,5 +919,3 @@ async function migrarLivrosParaSupabase() {
 
     console.log("Livros migrados com sucesso!", data);
 }
-
-migrarLivrosParaSupabase();
